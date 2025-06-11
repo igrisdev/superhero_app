@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:superhero_app/data/model/superhero_detail_response.dart';
 import 'package:superhero_app/data/model/superhero_response.dart';
 import 'package:superhero_app/data/repository.dart';
 
@@ -57,7 +58,7 @@ class _SuperheroSearchScreenState extends State<SuperheroSearchScreen> {
               itemCount: superHeroList?.length ?? 0,
               itemBuilder: (context, index) {
                 if (superHeroList != null) {
-                  return Text(superHeroList[index].name);
+                  return itemSuperhero(superHeroList[index]);
                 } else {
                   return Text('No hay resultados');
                 }
@@ -70,4 +71,7 @@ class _SuperheroSearchScreenState extends State<SuperheroSearchScreen> {
       },
     );
   }
+
+  Column itemSuperhero(SuperheroDetailResponse item) =>
+      Column(children: [Text('data')]);
 }
