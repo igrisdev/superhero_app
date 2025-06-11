@@ -12,8 +12,8 @@ class SuperheroSearchScreen extends StatefulWidget {
 
 class _SuperheroSearchScreenState extends State<SuperheroSearchScreen> {
   Future<SuperheroResponse?>? _superheroInfo;
-
-  Repository repository = Repository();
+  bool _isTextEmpty = true;
+  Repository _repository = Repository();
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +31,26 @@ class _SuperheroSearchScreenState extends State<SuperheroSearchScreen> {
               ),
               onChanged: (text) {
                 setState(() {
-                  _superheroInfo = repository.fetchSuperHeroInfo(text);
+                  _isTextEmpty = text.isEmpty;
+                  _superheroInfo = _repository.fetchSuperHeroInfo(text);
                 });
               },
             ),
           ),
-          bodyList(),
+          bodyList(_isTextEmpty),
         ],
       ),
     );
   }
 
-  FutureBuilder<SuperheroResponse?> bodyList() {
+  FutureBuilder<SuperheroResponse?> bodyList(bool isTextEmpty) {
     return FutureBuilder(
       future: _superheroInfo,
       builder: (context, snapshot) {
+        if (isTextEmpty) {
+          return Text('Ingrese un nombre');
+        }
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         } else if (snapshot.hasError) {
@@ -72,6 +77,38 @@ class _SuperheroSearchScreenState extends State<SuperheroSearchScreen> {
     );
   }
 
-  Column itemSuperhero(SuperheroDetailResponse item) =>
-      Column(children: [Text('data')]);
+  Padding itemSuperhero(SuperheroDetailResponse item) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.red,
+      ),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+            child: Image.network(
+              item.url,
+              height: 250,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
+          ),
+          Text(
+            item.name,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w300,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
