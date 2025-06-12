@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:superhero_app/data/model/superhero_detail_response.dart';
 import 'package:superhero_app/data/model/superhero_response.dart';
 import 'package:superhero_app/data/repository.dart';
+import 'package:superhero_app/screens/superhero_detail_screen.dart';
 
 class SuperheroSearchScreen extends StatefulWidget {
   const SuperheroSearchScreen({super.key});
@@ -79,35 +80,43 @@ class _SuperheroSearchScreenState extends State<SuperheroSearchScreen> {
 
   Padding itemSuperhero(SuperheroDetailResponse item) => Padding(
     padding: const EdgeInsets.all(8.0),
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.red,
+    child: GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SuperheroDetailScreen(superhero: item),
+        ),
       ),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.red,
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              child: Image.network(
+                item.url,
+                height: 250,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
+              ),
             ),
-            child: Image.network(
-              item.url,
-              height: 250,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              alignment: Alignment.center,
+            Text(
+              item.name,
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w300,
+                color: Colors.white,
+              ),
             ),
-          ),
-          Text(
-            item.name,
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );
